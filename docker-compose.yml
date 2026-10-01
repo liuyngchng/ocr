@@ -1,0 +1,20 @@
+services:
+  paddleocr-ppstructure:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: paddleocr-ppstructure:cpu
+    container_name: paddleocr-ppstructure
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8080
+      - PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK=True
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      start_period: 120s
+      retries: 5
